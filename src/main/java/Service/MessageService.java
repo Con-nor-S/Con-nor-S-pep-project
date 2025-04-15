@@ -84,4 +84,13 @@ public class MessageService {
             
         return null;
     }
+
+    /**
+     * Gets messages assosiated with given account ID
+     * @param acc_id ID to find messages for
+     * @return List of messages posted by acc_id
+     */
+    public List<Message> getMessagesByAccount(int acc_id){
+        return messageDAO.getMessagesByAccount(acc_id);
+    }
 }

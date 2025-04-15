@@ -157,4 +157,36 @@ public class MessageDAO {
         }
         return false;
     }
+
+    /**
+     * Gets all messages posted by given account ID
+     * @param acc_id ID of poster
+     * @return List of messages posted by given acc ID 
+     */
+    public List<Message> getMessagesByAccount(int acc_id){
+        Connection connection = ConnectionUtil.getConnection();
+        List<Message> result = new ArrayList<>();
+
+        try{
+            // SQL
+            String sql = "SELECT * FROM Message WHERE posted_by=?";
+            
+             // Insert values into prep statement
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             preparedStatement.setInt(1, acc_id);
+ 
+             // execute statement
+             ResultSet rs = preparedStatement.executeQuery();
+ 
+            //  parse results
+             while(rs.next()){
+                result.add(new Message( rs.getInt("message_id"), rs.getInt("posted_by"), rs.getString("message_text"), rs.getLong("time_posted_epoch") ));
+             }
+ 
+        } catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
+    }
 }

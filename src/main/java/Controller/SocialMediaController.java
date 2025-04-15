@@ -38,6 +38,9 @@ public class SocialMediaController {
         app.get("/messages", this::messagesGetHandler);
         app.get("/messages/{message_id}", this::messagesGetByIdHandler);
         app.delete("/messages/{message_id}", this::messagesDeleteByIdHandler);
+        app.patch("/messages/{message_id}", this::messagesUpdateByIdHandler);
+        app.get("/accounts/{account_id}/messages", this::accountsGetMessagesByAccountIdHandler);
+
         return app;
     }
 
@@ -153,6 +156,36 @@ public class SocialMediaController {
         // set body if deleted
         if(deleted_msg != null)
             ctx.json(deleted_msg);
+    }
+
+    /**
+     * messages update by id handler: updates message with ID matching path var
+     * @param ctx Javalin Context
+     */
+    private void messagesUpdateByIdHandler(Context ctx) throws JsonProcessingException{
+        // Get path and body params
+        ObjectMapper om = new ObjectMapper();
+        String msg_txt = om.readValue(ctx.body(), Message.class).getMessage_text();
+        int msg_id = Integer.parseInt(ctx.pathParam("message_id"));
+
+        // attempt message update
+        Message updated_msg = messageService.updateMessageById(msg_id, msg_txt);
+
+        // check result
+        if(updated_msg != null){
+            ctx.json(updated_msg);
+        } else {
+            ctx.status(400); // client error
+        }
+
+    }
+
+    /**
+     * accounts get messages by account ID handler: gets all messages sent by path param account_id
+     * @param ctx Javalin Context
+     */
+    private void accountsGetMessagesByAccountIdHandler(Context ctx){
+        ctx.json(messageService.getMessagesByAccount(Integer.parseInt(ctx.pathParam("account_id"))));
     }
 
 }
