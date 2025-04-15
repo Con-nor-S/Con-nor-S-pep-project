@@ -5,7 +5,7 @@ import java.sql.*;
 import Util.ConnectionUtil;
 import Model.Account;
 
-public class UserDAO{
+public class AccountDAO{
 
     /** 
      * Adds account to DB
