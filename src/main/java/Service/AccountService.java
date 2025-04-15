@@ -43,4 +43,13 @@ public class AccountService {
         return accountDAO.findAccount(acc);
     }
 
+    /**
+     * Helper method, gets account by ID
+     * @param acc_id ID of account to get
+     * @return Account matching acc_id if exists, else null
+     */
+    public Account findById(int acc_id){
+        return accountDAO.findById(acc_id);
+    }
+
 }

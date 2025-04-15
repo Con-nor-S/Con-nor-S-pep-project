@@ -71,4 +71,34 @@ public class AccountDAO{
         return null;
     }
 
+    /**
+     * Gets an account of given ID
+     * @param acc_id ID of account to find
+     * @return Account matching ID if found, else null
+     */
+    public Account findById(int acc_id){
+        Connection connection = ConnectionUtil.getConnection();
+        
+        try {
+            // SQL
+            String sql = "SELECT * FROM Account WHERE account_id=?";
+            
+            // insert values to prep statement
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, acc_id);
+
+            // execute query
+            ResultSet rs = preparedStatement.executeQuery();
+
+            // get and return Account found 
+            if(rs.next()){
+                return new Account(rs.getInt(1), rs.getString(2), rs.getString(3));
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        
+        return null;
+    }
+
 }
