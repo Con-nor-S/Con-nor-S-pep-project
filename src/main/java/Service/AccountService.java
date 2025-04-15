@@ -24,22 +24,23 @@ public class AccountService {
 
     /**
      * Creates an account
-     * @param username username of account to be added
-     * @param password password of account to be added
+     * @param acc account to be created
      * @return if success persisted Account greated, else null  
      */
-    public Account createAccount(String username, String password){
-        return accountDAO.insertAccount(new Account(username, password));
+    public Account createAccount(Account acc){
+        // Checks validity of credentials
+        if(acc.getUsername().isEmpty() || acc.getPassword().length() < 4)
+            return null;
+        return accountDAO.insertAccount(acc);
     }
 
     /**
      * Logs in an account
-     * @param username username of account to log in
-     * @param password password of account to log in
+     * @param acc account to be logged into
      * @return Account matching username and password, or null if none exists
      */
-    public Account loginAccount(String username, String password){
-        return accountDAO.findAccount(new Account(username, password));
+    public Account loginAccount(Account acc){
+        return accountDAO.findAccount(acc);
     }
 
 }
