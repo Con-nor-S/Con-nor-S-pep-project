@@ -35,6 +35,8 @@ public class SocialMediaController {
         app.post("/login", this::loginHandler);
         app.post("/register", this::registerHandler);
         app.post("/messages", this::messagesPostHandler);
+        app.get("/messages", this::messagesGetHandler);
+        app.get("/messages/{message_id}", this::messagesGetByIdHandler);
         return app;
     }
 
@@ -90,6 +92,11 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * messages post handler: attempts to create new message
+     * @param ctx Javalin Context
+     * @throws JsonProcessingException If cant convert request body JSON to Message obj
+     */
     private void messagesPostHandler(Context ctx) throws JsonProcessingException{
         // Get message from request body
         ObjectMapper om = new ObjectMapper();
@@ -112,5 +119,26 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * messages get handler: gets all messages
+     * @param ctx Javalin Context
+     */
+    private void messagesGetHandler(Context ctx) {
+        // Get all messages
+        ctx.json(messageService.getMessages());
+    }
+
+    /**
+     * messages get by id handler: gets message with ID matching path variable
+     * @param ctx Javalin Context
+     */
+    private void messagesGetByIdHandler(Context ctx) {
+        // Get message by ID
+        Message msg = messageService.getMessageById(Integer.parseInt(ctx.pathParam("message_id")));
+        
+        // return result if present 
+        if(msg != null)
+            ctx.json(msg);
+    }
 
 }
