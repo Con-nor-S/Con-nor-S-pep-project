@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import Util.ConnectionUtil;
-import Model.Account;
 import Model.Message;
 
 public class MessageDAO {
@@ -116,6 +115,36 @@ public class MessageDAO {
             // Insert values into prep statement
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, msg_id);
+
+            // execute statement
+            int rowsEffected = preparedStatement.executeUpdate();
+
+            // Return true if row deleted
+            return rowsEffected > 0;
+
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Updates message of given ID to given text
+     * @param msg_id ID of message to update
+     * @param msg_body new text for message
+     * @return true if update success, else false
+     */
+    public boolean updateMessageById(int msg_id, String msg_body){
+        Connection connection = ConnectionUtil.getConnection();
+
+        try{
+            // SQL
+            String sql = "UPDATE Message SET message_text=? WHERE message_id=?";
+            
+            // Insert values into prep statement
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, msg_body);
+            preparedStatement.setInt(2, msg_id);
 
             // execute statement
             int rowsEffected = preparedStatement.executeUpdate();

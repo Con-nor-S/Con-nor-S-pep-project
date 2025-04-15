@@ -55,15 +55,33 @@ public class MessageService {
     /**
      * Deletes message matching given ID
      * @param msg_id ID of message to delete
-     * @return deleted message delete success, else null
+     * @return deleted message if delete success, else null
      */
     public Message deleteMessageById(int msg_id){
-        // Get target message
+        // Get target message before delete
         Message msg = getMessageById(msg_id);
 
         // if delete successful, return target message
         if(messageDAO.deleteMessageById(msg_id))
             return msg;
+        return null;
+    }
+
+    /**
+     * Updates message matching given ID
+     * @param msg_id ID of message to update
+     * @param msg_body new text for message
+     * @return updated message on success, else null
+     */
+    public Message updateMessageById(int msg_id, String msg_body){
+        // Check for proper msg_body
+        if(msg_body.isEmpty() || msg_body.length() > 255)
+            return null;
+
+        // if update successful, return new message
+        if(messageDAO.updateMessageById(msg_id, msg_body))
+            return getMessageById(msg_id);
+            
         return null;
     }
 }
