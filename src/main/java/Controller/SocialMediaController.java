@@ -37,6 +37,7 @@ public class SocialMediaController {
         app.post("/messages", this::messagesPostHandler);
         app.get("/messages", this::messagesGetHandler);
         app.get("/messages/{message_id}", this::messagesGetByIdHandler);
+        app.delete("/messages/{message_id}", this::messagesDeleteByIdHandler);
         return app;
     }
 
@@ -139,6 +140,19 @@ public class SocialMediaController {
         // return result if present 
         if(msg != null)
             ctx.json(msg);
+    }
+
+    /**
+     * messages delete by id handler: deletes message with ID matching path variable
+     * @param ctx Javalin Context
+     */
+    private void messagesDeleteByIdHandler(Context ctx) {
+        // Get message by ID
+        Message deleted_msg = messageService.deleteMessageById(Integer.parseInt(ctx.pathParam("message_id")));
+        
+        // set body if deleted
+        if(deleted_msg != null)
+            ctx.json(deleted_msg);
     }
 
 }

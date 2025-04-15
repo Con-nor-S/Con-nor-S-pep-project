@@ -100,4 +100,32 @@ public class MessageDAO {
         }
         return null;
     }
+
+    /**
+     * Deletes message of given ID
+     * @param msg_id ID of desired message to delete
+     * @return true if deleted, else false
+     */
+    public boolean deleteMessageById(int msg_id){
+        Connection connection = ConnectionUtil.getConnection();
+
+        try{
+            // SQL
+            String sql = "DELETE FROM Message WHERE message_id=?";
+            
+            // Insert values into prep statement
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, msg_id);
+
+            // execute statement
+            int rowsEffected = preparedStatement.executeUpdate();
+
+            // Return true if row deleted
+            return rowsEffected > 0;
+
+        } catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
 }
